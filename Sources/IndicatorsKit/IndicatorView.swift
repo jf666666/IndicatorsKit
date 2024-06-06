@@ -182,7 +182,7 @@ struct IndicatorView: View {
                         ProgressView(value: indicator.progress)
                             .progressViewStyle(.linear)
                             .tint(indicator.style.tintColor)
-                            .frame(maxWidth: 200)
+                            .frame(width: isExpanded ? 300 : 200)
                     }
 
 					if !isExpanded, let content = indicator.subtitle {

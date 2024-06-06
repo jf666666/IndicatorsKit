@@ -70,7 +70,7 @@ public final class Indicators {
 
 	public func updateExpandedText(for id: String, expandedText: String) {
         if let index = indicators.firstIndex(where: { $0.id == id }) {
-            withAnimation {
+            withAnimation(.bouncy) {
                 indicators[index].expandedText = expandedText
             }
         }
