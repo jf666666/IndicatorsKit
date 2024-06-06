@@ -146,13 +146,13 @@ struct IndicatorView: View {
 //								.transition(.symbolEffect(.appear))
 								.onAppear { isIconVisible = true }
 								.onDisappear { isIconVisible = false }
-						case .progressIndicator:
+                        case .progressIndicator, .progressBar:
 							ProgressView()
 								#if os(macOS)
 								.controlSize(.small)
 								#endif
 								.onAppear { isIconVisible = false }
-						}
+                        }
 					}
 					.geometryGroup()
 					.padding(.leading, -2)
@@ -160,6 +160,8 @@ struct IndicatorView: View {
 				}
 
 				VStack {
+
+
 					Text(indicator.title)
 						.font(titleFont)
 						.fontWeight(.medium)
@@ -173,6 +175,12 @@ struct IndicatorView: View {
 						.fixedSize(horizontal: !isExpanded && indicator.title.count < 16, vertical: false)
 //						.geometryGroup()
 						.id(ViewID.titleLabel)
+
+                    if indicator.progress != nil {
+                        ProgressView(value: indicator.progress)
+                            .progressViewStyle(LinearProgressViewStyle())
+                            .tint(indicator.style.tintColor)
+                    }
 
 					if !isExpanded, let content = indicator.subtitle {
 						Text(content)

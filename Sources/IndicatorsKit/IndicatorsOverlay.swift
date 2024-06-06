@@ -84,22 +84,68 @@ private extension IndicatorsOverlay {
 
 // MARK: - Previews
 
-#if DEBUG
-#Preview {
-	IndicatorsOverlay(
-		model: .preview(
-			indicators: [
-				.init(id: "i1", icon: .progressIndicator, title: "Indicator 1", subtitle: "Indicator Subtitle", expandedText: "Expanded Text", dismissType: .manual),
-				.init(id: "i1", icon: .systemImage("rectangle.arrowtriangle.2.inward"), title: "Indicator 1", subtitle: "Indicator Subtitle", expandedText: "Expanded Text", dismissType: .automatic),
-				.init(id: "i2", icon: .progressIndicator, title: "Indicator 2", subtitle: "Indicator Subtitle", expandedText: "Expanded Text", dismissType: .manual),
-				.init(id: "i2", icon: .systemImage("rectangle.arrowtriangle.2.inward"), title: "Indicator 2", subtitle: "Indicator Subtitle", expandedText: "Expanded Text", dismissType: .automatic),
-			]
-		)
-	)
-	#if os(iOS)
-	.frame(maxHeight: .infinity, alignment: .top)
-	#elseif os(macOS)
-	.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-	#endif
+struct ContentView: View {
+    var indicators: Indicators = Indicators()
+    @State private var progress: Double = 0.0
+    @State private var progressIndicatorId: String = UUID().uuidString
+
+    var body: some View {
+        VStack {
+            Button("Show Progress Indicator") {
+                let progressIndicator = Indicator(
+                    id: progressIndicatorId,
+                    icon: .progressBar, 
+                    title: "Downloading...",
+                    dismissType: .manual,
+                    style: .init(tintColor: .gray),
+                    progress: progress
+                )
+                indicators.display(progressIndicator)
+                startProgressUpdate()
+            }
+        }
+        .overlay(
+            IndicatorsOverlay(model: indicators)
+        )
+    }
+
+    func startProgressUpdate() {
+        progress = 0.0
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+            if progress < 1.0 {
+                progress += 0.01
+                indicators.updateProgress(for: progressIndicatorId, progress: progress)
+            } else {
+                timer.invalidate()
+                indicators.dismiss(with: progressIndicatorId)
+            }
+        }
+    }
 }
-#endif
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+
+//#if DEBUG
+//#Preview {
+//    
+//	IndicatorsOverlay(
+//		model: .preview(
+//			indicators: [
+//				.init(id: "i1", icon: .progressIndicator, title: "Indicator 1", subtitle: "Indicator Subtitle", expandedText: "Expanded Text", dismissType: .manual),
+//				.init(id: "i1", icon: .systemImage("rectangle.arrowtriangle.2.inward"), title: "Indicator 1", subtitle: "Indicator Subtitle", expandedText: "Expanded Text", dismissType: .automatic),
+//				.init(id: "i2", icon: .progressIndicator, title: "Indicator 2", subtitle: "Indicator Subtitle", expandedText: "Expanded Text", dismissType: .manual),
+//				.init(id: "i2", icon: .systemImage("rectangle.arrowtriangle.2.inward"), title: "Indicator 2", subtitle: "Indicator Subtitle", expandedText: "Expanded Text", dismissType: .automatic),
+//			]
+//		)
+//	)
+//	#if os(iOS)
+//	.frame(maxHeight: .infinity, alignment: .top)
+//	#elseif os(macOS)
+//	.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+//	#endif
+//}
+//#endif

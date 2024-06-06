@@ -19,6 +19,7 @@ public struct Indicator {
 	public var dismissType: DismissType
 	public var style: Style
 	public var action: ActionType?
+    public var progress: Double?
 
 	public init(
 		id: String,
@@ -28,7 +29,8 @@ public struct Indicator {
 		expandedText: String? = nil,
 		dismissType: DismissType = .automatic,
 		style: Style = .default,
-		action: ActionType? = nil
+		action: ActionType? = nil,
+        progress: Double? = nil
 	) {
 		self.id = id
 		self.icon = icon
@@ -38,8 +40,10 @@ public struct Indicator {
 		self.dismissType = dismissType
 		self.style = style
 		self.action = action
+        self.progress = progress
 	}
 }
+
 
 // MARK: - Indicator+Identifiable
 
@@ -76,6 +80,7 @@ public extension Indicator {
 		case image(Image)
 		case systemImage(String)
 		case progressIndicator
+        case progressBar
 	}
 
 	struct Style {
