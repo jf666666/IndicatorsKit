@@ -55,6 +55,18 @@ public final class Indicators {
             }
         }
     }
+
+    public func updateSubtitle(for id: String, subtitle: String) {
+        if let index = indicators.firstIndex(where: { $0.id == id }) {
+            withAnimation {
+                indicators[index].subtitle = subtitle
+            }
+        }
+    }
+
+    public func updateSubtitle(for indicator: Indicator, subtitle: String) {
+        updateSubtitle(for: indicator.id, subtitle: subtitle)
+    }
 }
 
 // MARK: - Indicators+Internal
