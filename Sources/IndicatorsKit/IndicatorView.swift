@@ -91,15 +91,17 @@ struct IndicatorView: View {
                 withAnimation(.snappy) {
                     dragOffset = .zero
                 }
-                if indicator.isUserDismissible{
+
                     if $0.translation.height < dragThreshold {
-                        onDismiss?()
+                        if indicator.isUserDismissible{
+                            onDismiss?()
+                        }
                     } else if $0.translation.height > 0 {
                         if indicator.expandedText != nil {
                             toggleExpansionIfPossible()
                         }
                     }
-                }
+
             }
 	}
 
