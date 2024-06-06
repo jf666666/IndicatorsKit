@@ -76,12 +76,15 @@ internal extension Indicators {
 		self.timers[indicator.id]?.invalidate()
 
 		if case .after(let time) = indicator.dismissType {
-			let timer = Timer.scheduledTimer(withTimeInterval: time, repeats: false) { _ in
-				Task { @MainActor [weak self] in
-					self?.dismiss(indicator)
-				}
-			}
-			self.timers[indicator.id] = timer
+//			let timer = Timer.scheduledTimer(withTimeInterval: time, repeats: false) { _ in
+//				Task { @MainActor [weak self] in
+//					self?.dismiss(indicator)
+//				}
+//			}
+//			self.timers[indicator.id] = timer
+            DispatchQueue.main.asyncAfter(deadline: .now() + time) { [weak self] in
+                self?.dismiss(indicator)
+            }
 		}
 	}
 
