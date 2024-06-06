@@ -20,6 +20,7 @@ public struct Indicator {
 	public var style: Style
 	public var action: ActionType?
     public var progress: Double?
+    public var isUserDismissible: Bool // 新增的属性
 
 	public init(
 		id: String,
@@ -30,7 +31,8 @@ public struct Indicator {
 		dismissType: DismissType = .automatic,
 		style: Style = .default,
 		action: ActionType? = nil,
-        progress: Double? = nil
+        progress: Double? = nil,
+        isUserDismissible: Bool = true // 新增的属性
 	) {
 		self.id = id
 		self.icon = icon
@@ -41,7 +43,26 @@ public struct Indicator {
 		self.style = style
 		self.action = action
         self.progress = progress
+        self.isUserDismissible = isUserDismissible
 	}
+}
+
+// MARK: - Indicator+ProgressBar Initializer
+extension Indicator {
+    public init(
+        id: String,
+        title: String,
+        progress: Double,
+        style: Style = .init(tintColor: .secondary)
+    ) {
+        self.id = id
+        self.icon = .progressBar
+        self.title = title
+        self.progress = progress
+        self.dismissType = .manual
+        self.style = style
+        self.isUserDismissible = false
+    }
 }
 
 

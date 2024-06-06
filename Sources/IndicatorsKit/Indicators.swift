@@ -35,14 +35,16 @@ public final class Indicators {
 		dismiss(with: indicator.id)
 	}
 
-	@MainActor
+//	@MainActor
 	public func dismiss(with id: String) {
 		guard let index = indicators.firstIndex(where: { $0.id == id }) else {
 			return
 		}
-		_ = withAnimation(Self.animation) {
-			indicators.remove(at: index)
-		}
+        DispatchQueue.main.async{
+            _ = withAnimation(Self.animation) {
+                self.indicators.remove(at: index)
+            }
+        }
 		dismissTimer(for: id)
 	}
 

@@ -84,22 +84,23 @@ struct IndicatorView: View {
 	private var dragGesture: some Gesture {
 		DragGesture()
 			.onChanged {
-				dragOffset.width = $0.translation.width * dragInWrongDirectionMultiplier
-				dragOffset.height = $0.translation.height < 0 ? $0.translation.height : $0.translation.height * dragInWrongDirectionMultiplier
+                    dragOffset.width = $0.translation.width * dragInWrongDirectionMultiplier
+                    dragOffset.height = $0.translation.height < 0 ? $0.translation.height : $0.translation.height * dragInWrongDirectionMultiplier
 			}
-			.onEnded {
-				withAnimation(.snappy) {
-					dragOffset = .zero
-				}
-
-				if $0.translation.height < dragThreshold {
-					onDismiss?()
-				} else if $0.translation.height > 0 {
-					if indicator.expandedText != nil {
-						toggleExpansionIfPossible()
-					}
-				}
-			}
+            .onEnded {
+                withAnimation(.snappy) {
+                    dragOffset = .zero
+                }
+                if indicator.isUserDismissible{
+                    if $0.translation.height < dragThreshold {
+                        onDismiss?()
+                    } else if $0.translation.height > 0 {
+                        if indicator.expandedText != nil {
+                            toggleExpansionIfPossible()
+                        }
+                    }
+                }
+            }
 	}
 
 	init(
@@ -161,7 +162,6 @@ struct IndicatorView: View {
 
 				VStack {
 
-
 					Text(indicator.title)
 						.font(titleFont)
 						.fontWeight(.medium)
@@ -178,8 +178,9 @@ struct IndicatorView: View {
 
                     if indicator.progress != nil {
                         ProgressView(value: indicator.progress)
-                            .progressViewStyle(LinearProgressViewStyle())
+                            .progressViewStyle(.linear)
                             .tint(indicator.style.tintColor)
+                            .frame(maxWidth: 200)
                     }
 
 					if !isExpanded, let content = indicator.subtitle {
