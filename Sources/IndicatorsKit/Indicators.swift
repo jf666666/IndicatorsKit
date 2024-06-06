@@ -67,6 +67,14 @@ public final class Indicators {
     public func updateSubtitle(for indicator: Indicator, subtitle: String) {
         updateSubtitle(for: indicator.id, subtitle: subtitle)
     }
+
+	public func updateExpandedText(for id: String, expandedText: String) {
+        if let index = indicators.firstIndex(where: { $0.id == id }) {
+            withAnimation {
+                indicators[index].expandedText = expandedText
+            }
+        }
+    }
 }
 
 // MARK: - Indicators+Internal
